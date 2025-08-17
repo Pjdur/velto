@@ -6,6 +6,7 @@ authors = ["Your Name <you@example.com>"]
 description = "Velto: expressive, modern, and grounded Rust framework"
 license = "MIT"
 repository = "https://github.com/yourusername/velto"
+documentation = "https://docs.rs/velto"
 keywords = ["framework", "rust", "modern", "expressive"]
 categories = ["development-tools", "web-programming"]
 readme = "README.md"

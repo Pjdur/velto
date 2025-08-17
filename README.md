@@ -16,11 +16,11 @@ Velto is a lightweight, modular web framework for Rust, designed for clarity, sp
 
 ## 📦 Installation
 
-Velto is currently in development and not yet published to crates.io. To use it, add the following to your `Cargo.toml`:
+Add Velto to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-velto = { git = "https://github.com/pjdur/velto.git" }
+velto = "0.1.0"
 ```
 
 ---
