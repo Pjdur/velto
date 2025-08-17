@@ -1,0 +1,15 @@
+[package]
+name = "velto"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <you@example.com>"]
+description = "Velto: expressive, modern, and grounded Rust framework"
+license = "MIT"
+repository = "https://github.com/yourusername/velto"
+keywords = ["framework", "rust", "modern", "expressive"]
+categories = ["development-tools", "web-programming"]
+readme = "README.md"
+
+[dependencies]
+regex = "1.11.1"
+tiny_http = "0.12.0"
