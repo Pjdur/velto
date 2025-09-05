@@ -1,16 +1,21 @@
 [package]
 name = "velto"
-version = "0.1.2"
+version = "1.0.0"
 edition = "2021"
 authors = ["Pjdur"]
-description = "Velto: expressive, modern, and grounded Rust framework"
+description = "Velto: expressive, async-native, and grounded Rust framework"
 license = "MIT"
 repository = "https://github.com/pjdur/velto"
 documentation = "https://docs.rs/velto"
-keywords = ["framework", "rust", "modern", "expressive"]
+keywords = ["framework", "rust", "async", "web", "expressive"]
 categories = ["development-tools", "web-programming"]
 readme = "README.md"
 
 [dependencies]
 regex = "1.11.1"
-tiny_http = "0.12.0"
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "0.20"
+tungstenite = "0.20"
+notify = "6.1"
+futures-util = "0.3.31"
+async_tiny = "0.1.0"

@@ -1,3 +1,11 @@
+/// render! macro allowing for easy templating
+/// Example:
+/// ```
+/// render!("index.html", {
+///     "title" => "Welcome",
+///     "message" => "Hello, Velto!"
+/// })
+/// ```
 #[macro_export]
 macro_rules! render {
     ($file:expr, { $($key:expr => $val:expr),* $(,)? }) => {{
@@ -9,6 +17,15 @@ macro_rules! render {
     }};
 }
 
+/// Route macro for defining routes
+/// Example:
+/// ```
+/// route!(app, "/hello" => |req| {
+///     render!("hello.html", {
+///         "name" => "World"
+///     })
+/// });
+/// ```
 #[macro_export]
 macro_rules! route {
     ($app:expr, $path:expr => $handler:expr) => {{

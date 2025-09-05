@@ -1,10 +1,13 @@
 pub mod app;
-pub mod router;
-pub mod template;
 pub mod macros;
 pub mod prelude;
+pub(crate) mod reload;
+pub mod router;
+pub mod template;
 pub use app::App;
-pub use router::{Request, Response, Header, Handler};
-pub use template::render_template;
+pub use router::{Handler, Header, Request, Response};
 pub use std::collections::HashMap;
 pub use std::io::Cursor;
+pub use template::render_template;
+pub mod dev;
+pub use dev::{is_dev_mode, set_dev_mode};

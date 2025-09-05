@@ -1,4 +1,6 @@
-pub use std::io::Cursor;
-pub use tiny_http::{Request, Response, Header};
+// No need for std::io::Cursor anymore — async_tiny::Response is concrete.
+pub use async_tiny::{Header, Request, Response};
 
-pub type Handler = fn(&Request) -> Response<Cursor<Vec<u8>>>;
+/// A route handler takes a reference to an async_tiny::Request
+/// and returns an async_tiny::Response.
+pub type Handler = fn(&Request) -> Response;
