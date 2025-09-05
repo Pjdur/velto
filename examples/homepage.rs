@@ -11,6 +11,7 @@ fn homepage(_req: &Request) -> Response {
 async fn main() -> std::io::Result<()> {
     let mut app = App::new();
     route!(app, "/" => homepage);
+    app.enable_dev_mode();
     app.serve_static("static");
     app.run("127.0.0.1:8080").await
 }

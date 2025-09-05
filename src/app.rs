@@ -1,7 +1,9 @@
 use crate::router::{Handler, Response};
 use async_tiny::Server;
+use pathx::Normalize;
 use std::collections::HashMap;
 use std::fs;
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 
 /// Velto application instance. Manages routes, static directories, and dev mode.
@@ -34,7 +36,10 @@ impl App {
 
     /// Registers a route handler for a given path.
     pub fn route(&mut self, path: &str, handler: Handler) {
-        self.routes.lock().unwrap().insert(path.to_string(), handler);
+        self.routes
+            .lock()
+            .unwrap()
+            .insert(path.to_string(), handler);
     }
 
     /// Adds a directory to serve static files from.
@@ -93,17 +98,32 @@ impl App {
                 response = Some(handler(&request));
             } else {
                 for dir in &self.watch_dirs {
-                    let path = format!("{}/{}", dir, url.trim_start_matches('/'));
-                    if let Ok(content) = fs::read(&path) {
-                        response = Some(Response::from_data(content));
-                        break;
+                    let raw_path = PathBuf::from(dir).join(url.trim_start_matches('/'));
+
+                    match raw_path.normalize() {
+                        Ok(normalized_path) => {
+                            let static_root =
+                                std::fs::canonicalize(dir).unwrap_or_else(|_| PathBuf::from(dir));
+
+                            if normalized_path.starts_with(&static_root) {
+                                if let Ok(content) = fs::read(&normalized_path) {
+                                    response = Some(Response::from_data(content));
+                                    break;
+                                }
+                            } else if self.dev_mode {
+                                println!("⚠️ Blocked traversal: {}", normalized_path.display());
+                            }
+                        }
+                        Err(e) => {
+                            if self.dev_mode {
+                                println!("⚠️ Failed to normalize path: {e}");
+                            }
+                        }
                     }
                 }
 
                 if response.is_none() {
-                    response = Some(
-                        Response::from_string("404 Not Found").with_status_code(404)
-                    );
+                    response = Some(Response::from_string("404 Not Found").with_status_code(404));
                 }
             }
 

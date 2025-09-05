@@ -669,6 +669,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "pathx"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae513a2545cc052d4e56c364ad38246c26e90c7b75b24d961540441d7a28a7c4"
+
+[[package]]
 name = "percent-encoding"
 version = "2.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1036,6 +1042,7 @@ dependencies = [
  "async_tiny",
  "futures-util",
  "notify",
+ "pathx",
  "regex",
  "tokio",
  "tokio-tungstenite",
