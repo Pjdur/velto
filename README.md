@@ -7,6 +7,9 @@
     <a href="https://crates.io/crates/velto">
       <img src="https://img.shields.io/crates/v/velto?style=flat-square" alt="Crates.io">
     </a>
+    <a href="https://github.com/Pjdur/velto/actions">
+      <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pjdur/velto/.github%2Fworkflows%2Frust.yml?style=flat-square">
+    </a>
     <a href="https://docs.rs/velto">
       <img src="https://img.shields.io/docsrs/velto?style=flat-square" alt="Docs.rs">
     </a>
