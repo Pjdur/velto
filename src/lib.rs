@@ -7,7 +7,6 @@ pub mod template;
 pub use app::App;
 pub use router::{Handler, Header, Request, Response};
 pub use std::collections::HashMap;
-pub use std::io::Cursor;
 pub use template::render_template;
 pub mod dev;
 pub use dev::{is_dev_mode, set_dev_mode};
