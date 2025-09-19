@@ -28,7 +28,10 @@ macro_rules! render {
 /// ```
 #[macro_export]
 macro_rules! route {
+    ($app:expr, $method:ident $path:expr => $handler:expr) => {{
+        $app.route($crate::http_method::Method::$method, $path, $handler);
+    }};
     ($app:expr, $path:expr => $handler:expr) => {{
-        $app.route($path, $handler);
+        $app.route($crate::http_method::Method::GET, $path, $handler);
     }};
 }

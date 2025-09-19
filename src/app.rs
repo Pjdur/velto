@@ -1,4 +1,5 @@
 use crate::router::{Handler, Response};
+use crate::http_method::Method;
 use async_tiny::Server;
 use pathx::Normalize;
 use std::collections::HashMap;
@@ -8,7 +9,7 @@ use std::sync::{Arc, Mutex};
 
 /// Velto application instance. Manages routes, static directories, and dev mode.
 pub struct App {
-    routes: Arc<Mutex<HashMap<String, Handler>>>,
+    routes: Arc<Mutex<HashMap<(Method, String), Handler>>>,
     watch_dirs: Vec<String>,
     dev_mode: bool,
 }
@@ -34,12 +35,12 @@ impl App {
         self.dev_mode
     }
 
-    /// Registers a route handler for a given path.
-    pub fn route(&mut self, path: &str, handler: Handler) {
+    /// Registers a route handler for a given method and path.
+    pub fn route(&mut self, method: Method, path: &str, handler: Handler) {
         self.routes
             .lock()
             .unwrap()
-            .insert(path.to_string(), handler);
+            .insert((method, path.to_string()), handler);
     }
 
     /// Adds a directory to serve static files from.
@@ -71,8 +72,8 @@ impl App {
         }
 
         println!("🔗 Registered routes:");
-        for path in self.routes.lock().unwrap().keys() {
-            println!("   • {}", path);
+        for (key, _) in self.routes.lock().unwrap().iter() {
+            println!("   • [{}] {}", format!("{:?}", key.0), key.1);
         }
 
         // Start LiveReload after printing startup info
@@ -89,12 +90,13 @@ impl App {
 
         // Handle incoming requests
         while let Some(request) = server.next().await {
+            let method = Method::from_hyper(request.method());
             let url = request.url().to_string();
             let routes = self.routes.lock().unwrap();
 
             let mut response = None;
 
-            if let Some(handler) = routes.get(&url) {
+            if let Some(handler) = routes.get(&(method.clone(), url.clone())) {
                 response = Some(handler(&request));
             } else {
                 for dir in &self.watch_dirs {

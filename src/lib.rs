@@ -1,6 +1,8 @@
 pub mod app;
+pub mod http_method;
 pub mod macros;
 pub mod prelude;
+pub mod form;
 pub(crate) mod reload;
 pub mod router;
 pub mod template;
