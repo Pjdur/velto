@@ -1,0 +1,37 @@
+name: Feature Request
+about: Suggest a new feature or enhancement for Velto
+title: "[Feature] "
+labels: enhancement
+assignees: "Pjdur"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🚀 Feature Request
+
+        Thanks for suggesting a new feature for Velto! Please fill out the details below.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Feature Summary
+      description: Briefly describe the feature you'd like to see.
+      placeholder: "Add support for HEAD requests"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this feature useful?
+      description: Explain the use case or problem this feature solves.
+      placeholder: "This would help users handle HEAD requests without writing custom logic."
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: Share any thoughts on how this could be implemented.
+      placeholder: "Could be added to the route! macro with a default response."
