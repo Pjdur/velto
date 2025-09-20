@@ -9,7 +9,7 @@ use std::sync::{Arc, Mutex};
 
 /// Velto application instance. Manages routes, static directories, and dev mode.
 pub struct App {
-    routes: Arc<Mutex<HashMap<(Method, String), Handler>>>,
+    routes: Arc<Mutex<HashMap<String, HashMap<Method, Handler>>>>,
     watch_dirs: Vec<String>,
     dev_mode: bool,
 }
@@ -37,10 +37,20 @@ impl App {
 
     /// Registers a route handler for a given method and path.
     pub fn route(&mut self, method: Method, path: &str, handler: Handler) {
-        self.routes
-            .lock()
-            .unwrap()
-            .insert((method, path.to_string()), handler);
+        let mut routes = self.routes.lock().unwrap();
+        routes
+            .entry(path.to_string())
+            .or_insert_with(HashMap::new)
+            .insert(method, handler);
+    }
+
+    /// Registers the same handler for multiple methods at a single path.
+    pub fn route_all(&mut self, methods: &[Method], path: &str, handler: Handler) {
+        let mut routes = self.routes.lock().unwrap();
+        let method_map = routes.entry(path.to_string()).or_insert_with(HashMap::new);
+        for method in methods {
+            method_map.insert(method.clone(), handler.clone());
+        }
     }
 
     /// Adds a directory to serve static files from.
@@ -72,8 +82,10 @@ impl App {
         }
 
         println!("🔗 Registered routes:");
-        for (key, _) in self.routes.lock().unwrap().iter() {
-            println!("   • [{}] {}", format!("{:?}", key.0), key.1);
+        for (path, method_map) in self.routes.lock().unwrap().iter() {
+            for method in method_map.keys() {
+                println!("   • [{}] {}", format!("{:?}", method), path);
+            }
         }
 
         // Start LiveReload after printing startup info
@@ -96,9 +108,13 @@ impl App {
 
             let mut response = None;
 
-            if let Some(handler) = routes.get(&(method.clone(), url.clone())) {
-                response = Some(handler(&request));
-            } else {
+            if let Some(method_map) = routes.get(&url) {
+                if let Some(handler) = method_map.get(&method) {
+                    response = Some(handler(&request));
+                }
+            }
+
+            if response.is_none() {
                 for dir in &self.watch_dirs {
                     let raw_path = PathBuf::from(dir).join(url.trim_start_matches('/'));
 
