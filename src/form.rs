@@ -1,5 +1,5 @@
-use urlencoding::decode;
 use std::collections::HashMap;
+use urlencoding::decode;
 
 /// Parses a URL-encoded form body into a HashMap with percent-decoding.
 pub fn parse(body: &str) -> HashMap<String, String> {

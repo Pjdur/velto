@@ -1,5 +1,5 @@
-use crate::router::{Handler, Response};
 use crate::http_method::Method;
+use crate::router::{Handler, Response};
 use async_tiny::Server;
 use pathx::Normalize;
 use std::collections::HashMap;

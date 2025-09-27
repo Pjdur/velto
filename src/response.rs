@@ -1,4 +1,4 @@
-use crate::{Header, Response, HeaderName, HeaderValue};
+use crate::{Header, HeaderName, HeaderValue, Response};
 
 /// Creates a 302 Found redirect response to the specified location.
 ///
@@ -26,10 +26,8 @@ pub fn redirect(to: &str) -> Response {
 /// let response = redirect_with_status("/new-url", 301);
 /// ```
 pub fn redirect_with_status(to: &str, status: u16) -> Response {
-    Response::empty(status).with_header(
-        Header(
-            HeaderName::from_static("location"),
-            HeaderValue::from_str(to).expect("valid Location header"),
-        )
-    )
+    Response::empty(status).with_header(Header(
+        HeaderName::from_static("location"),
+        HeaderValue::from_str(to).expect("valid Location header"),
+    ))
 }
