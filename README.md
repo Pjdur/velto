@@ -82,13 +82,14 @@ app.enable_dev_mode();
 
 ## 🧰 Project Structure
 
-Velto is organized into modular components:
+Velto is organized into modular components for clarity and maintainability:
 
 ```
 velto/
 ├── src/
 │   ├── app.rs          # Core application logic
 │   ├── router.rs       # Routing and handler dispatch
+│   ├── response.rs     # HTTP response utilities including redirect helpers
 │   ├── reload.rs       # LiveReload WebSocket + file watcher
 │   ├── dev.rs          # Dev mode toggles and helpers
 │   ├── template.rs     # Templating engine
