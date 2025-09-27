@@ -38,7 +38,7 @@ Add Velto to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-velto = "1.0.0"
+velto = "1.5.0"
 ```
 
 ---
