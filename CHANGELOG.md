@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.5.2] - 2025-10-08|
+
+### Changed
+
+- Enabled true multi-app support by dynamically assigning unique WebSocket LiveReload ports to each running app, allowing up to 100 apps simultaneously without port conflicts. Enabled true multi-app support 
+
 ## [1.5.1] - 2025-10-08
 
 ### Fixed
