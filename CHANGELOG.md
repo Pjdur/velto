@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.5.1] - 2025-10-08
+
+### Fixed
+
+- Remove blocking supposed traversal attempts as `404` and path normalization are used. Blocking supposed traversal attempts makes static assets be blocked from being served.
+
 ## [1.5.0] - 2025-09-27
 
 ### Added

@@ -120,16 +120,11 @@ impl App {
 
                     match raw_path.normalize() {
                         Ok(normalized_path) => {
-                            let static_root =
-                                std::fs::canonicalize(dir).unwrap_or_else(|_| PathBuf::from(dir));
-
-                            if normalized_path.starts_with(&static_root) {
-                                if let Ok(content) = fs::read(&normalized_path) {
-                                    response = Some(Response::from_data(content));
-                                    break;
-                                }
+                            if let Ok(content) = fs::read(&normalized_path) {
+                                response = Some(Response::from_data(content));
+                                break;
                             } else if self.dev_mode {
-                                println!("⚠️ Blocked traversal: {}", normalized_path.display());
+                                println!("⚠️ Static file not found: {}", normalized_path.display());
                             }
                         }
                         Err(e) => {
