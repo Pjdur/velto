@@ -1,3 +1,5 @@
+## 🚀 Velto
+
 <p align="center">
   <h1 align="center">🚀 Velto</h1>
   <p align="center">
@@ -29,6 +31,7 @@
 - 🔄 LiveReload support in development mode
 - 📁 Static file serving with zero config
 - 🧠 Minimal boilerplate via `velto::prelude`
+- 🛠 First-class CLI support via [`velto-cli`](https://crates.io/crates/velto-cli)
 
 ---
 
@@ -39,6 +42,15 @@ Add Velto to your `Cargo.toml`:
 ```toml
 [dependencies]
 velto = "1.6.0"
+```
+
+Or use [`velto-cli`](https://crates.io/crates/velto-cli) to scaffold a new project instantly:
+
+```bash
+cargo install velto-cli
+velto new my-app
+cd my-app
+velto run
 ```
 
 ---
@@ -91,8 +103,8 @@ velto/
 │   ├── router.rs       # Routing and handler dispatch
 │   ├── response.rs     # HTTP response utilities including redirect helpers
 │   ├── http_method.rs  # HTTP method utilities
-│   ├── form.rs        # Form data parsing
-│   ├── util.rs        # Utility functions (e.g., MIME types)
+│   ├── form.rs         # Form data parsing
+│   ├── util.rs         # Utility functions (e.g., MIME types)
 │   ├── reload.rs       # LiveReload WebSocket + file watcher
 │   ├── dev.rs          # Dev mode toggles and helpers
 │   ├── template.rs     # Templating engine
