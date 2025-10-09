@@ -38,7 +38,7 @@ Add Velto to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-velto = "1.5.2"
+velto = "1.6.0"
 ```
 
 ---
@@ -90,6 +90,9 @@ velto/
 │   ├── app.rs          # Core application logic
 │   ├── router.rs       # Routing and handler dispatch
 │   ├── response.rs     # HTTP response utilities including redirect helpers
+│   ├── http_method.rs  # HTTP method utilities
+│   ├── form.rs        # Form data parsing
+│   ├── util.rs        # Utility functions (e.g., MIME types)
 │   ├── reload.rs       # LiveReload WebSocket + file watcher
 │   ├── dev.rs          # Dev mode toggles and helpers
 │   ├── template.rs     # Templating engine

@@ -1,10 +1,12 @@
 use crate::http_method::Method;
 use crate::router::{Handler, Response};
-use async_tiny::Server;
+use crate::util::mime_type_for;
+use async_tiny::{Header, Server};
 use pathx::Normalize;
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
+use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 
 /// Velto application instance. Manages routes, static directories, and dev mode.
@@ -121,7 +123,10 @@ impl App {
                     match raw_path.normalize() {
                         Ok(normalized_path) => {
                             if let Ok(content) = fs::read(&normalized_path) {
-                                response = Some(Response::from_data(content));
+                                let mime = mime_type_for(&normalized_path);
+                                response = Some(Response::from_data(content).with_header(
+                                    Header::from_str(&format!("Content-Type: {}", mime)).unwrap(),
+                                ));
                                 break;
                             } else if self.dev_mode {
                                 println!("⚠️ Static file not found: {}", normalized_path.display());

@@ -4,7 +4,13 @@ All notable changes to this project are documented here.
 
 ---
 
-## [1.5.2] - 2025-10-08|
+## [1.6.0] - 2025-10-08
+
+### Added
+
+- Add MIME type detection for static file serving using custom `mime_type_for` function. Static files are now served with appropriate `Content-Type` headers based on their file extensions, improving browser compatibility and performance.
+   
+## [1.5.2] - 2025-10-08
 
 ### Changed
 

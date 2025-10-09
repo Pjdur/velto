@@ -36,7 +36,7 @@ fn find_free_port(start: u16) -> Option<u16> {
 ///
 /// * `tx` - A broadcast channel used to notify reload events.
 /// * `watch_paths` - A list of directories to watch for changes.
-pub async fn start(tx: broadcast::Sender<()>, watch_paths: Vec<String>) {
+pub(crate) async fn start(tx: broadcast::Sender<()>, watch_paths: Vec<String>) {
     let port = find_free_port(35729).unwrap_or(35729);
     crate::dev::set_reload_port(port);
 
@@ -74,7 +74,9 @@ async fn start_ws_server(tx: broadcast::Sender<()>, port: u16) {
             while rx.recv().await.is_ok() {
                 println!("🔄 Reloading...");
                 let _ = write
-                    .send(tokio_tungstenite::tungstenite::Message::Text("reload".into()))
+                    .send(tokio_tungstenite::tungstenite::Message::Text(
+                        "reload".into(),
+                    ))
                     .await;
             }
         });

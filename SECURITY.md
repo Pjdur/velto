@@ -6,7 +6,7 @@ The following versions of Velto are currently supported with security updates:
 
 | Version   | Supported          |
 |-----------|--------------------|
-| 1.0.x     | ✅ :white_check_mark: |
+| 1.x.x     | ✅ :white_check_mark: |
 | < 1.0.0   | ❌ :x:                |
 
 Only the latest stable release is actively maintained. Older versions may not receive security patches.
