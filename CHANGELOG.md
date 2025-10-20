@@ -4,6 +4,19 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.7.0] - 2025-10-20
+
+### Added
+- `{% include 'file.html' %}` support for partial templates
+- `{% extends 'base.html' %}` and `{% block name %}` for template inheritance
+- Improved `render_template` engine with recursive parsing and block resolution
+
+### Changed
+- `render_template` now supports multi-pass rendering for includes and inheritance
+
+### Notes
+- No breaking changes. Existing templates using `{{ key }}` continue to work.
+
 ## [1.6.0] - 2025-10-08
 
 ### Added
