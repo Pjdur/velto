@@ -13,9 +13,9 @@ dependencies = [
 
 [[package]]
 name = "async_tiny"
-version = "0.2.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "972ac50620540846a056f3e94384a25a0ff465c361c8e6a061d79be45a504ee6"
+checksum = "88adf3e310ea6a2c01b44ebc621953963cac49c9d4cfa6256b24a554e2b3de14"
 dependencies = [
  "bytes",
  "http",
@@ -692,7 +692,7 @@ checksum = "09cc8ee72d2a9becf2f2febe0205bbed8fc6615b7cb429ad062dc7b7ddd036a9"
 
 [[package]]
 name = "velto"
-version = "1.7.0"
+version = "1.8.0"
 dependencies = [
  "async_tiny",
  "futures-util",
@@ -704,6 +704,7 @@ dependencies = [
  "tokio-tungstenite",
  "tungstenite",
  "urlencoding",
+ "velto",
 ]
 
 [[package]]

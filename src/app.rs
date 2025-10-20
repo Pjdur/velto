@@ -46,6 +46,13 @@ impl App {
             .insert(method, handler);
     }
 
+    /// Returns all registered routes
+    pub fn get_routes(
+        &self,
+    ) -> std::sync::MutexGuard<'_, HashMap<String, HashMap<Method, Handler>>> {
+        self.routes.lock().unwrap()
+    }
+
     /// Registers the same handler for multiple methods at a single path.
     pub fn route_all(&mut self, methods: &[Method], path: &str, handler: Handler) {
         let mut routes = self.routes.lock().unwrap();

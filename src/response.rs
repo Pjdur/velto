@@ -6,6 +6,8 @@ use crate::{Header, HeaderName, HeaderValue, Response};
 ///
 /// # Example
 /// ```
+/// use velto::response::redirect;
+///
 /// let response = redirect("/login");
 /// ```
 pub fn redirect(to: &str) -> Response {
@@ -23,6 +25,8 @@ pub fn redirect(to: &str) -> Response {
 ///
 /// # Example
 /// ```
+/// use velto::response::redirect_with_status;
+///
 /// let response = redirect_with_status("/new-url", 301);
 /// ```
 pub fn redirect_with_status(to: &str, status: u16) -> Response {

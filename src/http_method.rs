@@ -36,6 +36,8 @@ impl Method {
     ///
     /// ```
     /// use http::Method as HyperMethod;
+    /// use velto::http_method::Method;
+    ///
     /// let method = Method::from_hyper(&HyperMethod::POST);
     /// assert_eq!(method, Method::POST);
     /// ```

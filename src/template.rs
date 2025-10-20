@@ -23,7 +23,10 @@ use std::fs;
 ///
 /// # Example
 ///
-/// ```rust
+/// ```
+/// use std::collections::HashMap;
+/// use velto::render_template;
+///
 /// let mut context = HashMap::new();
 /// context.insert("title", "Welcome");
 /// context.insert("message", "Hello, Velto!");
@@ -72,17 +75,22 @@ pub fn render_template(file: &str, context: &HashMap<&str, &str>) -> String {
         let base_contents = load_template(base_file);
 
         // Extract blocks from child
-        let block_re = Regex::new(r"\{%\s*block\s+(\w+)\s*%\}(?s)(.*?)\{%\s*endblock\s*%\}").unwrap();
+        let block_re =
+            Regex::new(r"\{%\s*block\s+(\w+)\s*%\}(?s)(.*?)\{%\s*endblock\s*%\}").unwrap();
         let mut blocks = HashMap::new();
         for caps in block_re.captures_iter(&contents) {
             blocks.insert(caps[1].to_string(), caps[2].to_string());
         }
 
         // Replace blocks in base
-        let base_block_re = Regex::new(r"\{%\s*block\s+(\w+)\s*%\}(?s)(.*?)\{%\s*endblock\s*%\}").unwrap();
+        let base_block_re =
+            Regex::new(r"\{%\s*block\s+(\w+)\s*%\}(?s)(.*?)\{%\s*endblock\s*%\}").unwrap();
         contents = base_block_re
             .replace_all(&base_contents, |caps: &regex::Captures| {
-                blocks.get(&caps[1]).cloned().unwrap_or_else(|| caps[2].to_string())
+                blocks
+                    .get(&caps[1])
+                    .cloned()
+                    .unwrap_or_else(|| caps[2].to_string())
             })
             .to_string();
     }
@@ -90,9 +98,7 @@ pub fn render_template(file: &str, context: &HashMap<&str, &str>) -> String {
     // Handle {% include 'header.html' %}
     let include_re = Regex::new(r"\{%\s*include\s*'([^']+)'\s*%\}").unwrap();
     contents = include_re
-        .replace_all(&contents, |caps: &regex::Captures| {
-            load_template(&caps[1])
-        })
+        .replace_all(&contents, |caps: &regex::Captures| load_template(&caps[1]))
         .to_string();
 
     // Handle {{ key }} interpolation

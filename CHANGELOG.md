@@ -4,6 +4,19 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.8.0] - 2025-10-20
+
+### Added
+- `TestRequest`: a lightweight request simulator for testing Velto apps without starting a server
+- `velto::test` module: enables unit testing of routes, responses, and template rendering
+- Internal test suite for Velto itself, using `TestRequest` to validate routing, status codes, and template output
+
+### Notes
+- `TestRequest` supports method, path, and body simulation
+- `Request::fake()` added to `async_tiny` to support testing
+- `App::get_routes()` exposed for internal test access
+- All core features now covered by automated tests
+
 ## [1.7.0] - 2025-10-20
 
 ### Added

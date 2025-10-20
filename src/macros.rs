@@ -1,10 +1,12 @@
 /// render! macro allowing for easy templating
 /// Example:
 /// ```
-/// render!("index.html", {
+/// use velto::{render, Response};
+///
+/// let _ = render!("index.html", {
 ///     "title" => "Welcome",
 ///     "message" => "Hello, Velto!"
-/// })
+/// });
 /// ```
 #[macro_export]
 macro_rules! render {
@@ -21,16 +23,17 @@ macro_rules! render {
 /// Supports single method, multiple methods, or default GET.
 /// Example:
 /// ```
-/// route!(app, "/hello" => |req| {
-///     render!("hello.html", {
-///         "name" => "World"
-///     })
+/// use velto::{App, Response, route};
+///
+/// let mut app = App::new();
+/// route!(app, "/hello" => |_req| {
+///     Response::from_string("Hello!")
 /// });
 ///
 /// route!(app, [GET, POST] "/signup" => |req| {
 ///     match req.method().as_str() {
 ///         "POST" => Response::from_string("Signed up!"),
-///         _ => render!("signup.html", { "title" => "Sign Up" }),
+///         _ => Response::from_string("Sign up form"),
 ///     }
 /// });
 /// ```
@@ -55,6 +58,9 @@ macro_rules! route {
 /// route_any! macro for registering a handler across all standard HTTP methods
 /// Example:
 /// ```
+/// use velto::{App, Response, route_any};
+///
+/// let mut app = App::new();
 /// route_any!(app, "/echo" => |req| {
 ///     Response::from_string(format!("Method: {}", req.method()))
 /// });

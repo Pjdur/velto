@@ -7,6 +7,7 @@ mod reload;
 pub mod response;
 pub mod router;
 pub mod template;
+pub mod test;
 pub use app::App;
 pub use async_tiny::{HeaderName, HeaderValue};
 pub use router::{Handler, Header, Request, Response};
