@@ -1,5 +1,3 @@
-## 🚀 Velto
-
 <p align="center">
   <h1 align="center">🚀 Velto</h1>
   <p align="center">
@@ -25,12 +23,13 @@
 
 ## ✨ Features
 
-- 🧭 Intuitive routing with `route!(...)` macro
-- 🧵 Templating with built-in `render!` macro
+- 🧭 Intuitive routing with `route!(...)` and `route_any!(...)` macros
+- 🧵 Templating with `render!`, `{% include %}`, and `{% extends %}` support
 - ⚡ Fully async, powered by [`async_tiny`](https://crates.io/crates/async_tiny)
 - 🔄 LiveReload support in development mode
 - 📁 Static file serving with zero config
 - 🧠 Minimal boilerplate via `velto::prelude`
+- 🧪 Built-in testing with `TestRequest`
 - 🛠 First-class CLI support via [`velto-cli`](https://crates.io/crates/velto-cli)
 
 ---
@@ -41,7 +40,7 @@ Add Velto to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-velto = "1.6.0"
+velto = "1.8.0"
 ```
 
 Or use [`velto-cli`](https://crates.io/crates/velto-cli) to scaffold a new project instantly:
@@ -92,6 +91,28 @@ app.enable_dev_mode();
 
 ---
 
+## 🧪 Testing
+
+Velto includes a built-in `TestRequest` type for simulating requests in unit tests:
+
+```rust
+#[test]
+fn test_homepage() {
+    let mut app = App::new();
+    route!(app, "/" => |_req| {
+        Response::from_string("Hello, test!")
+    });
+
+    let res = velto::test::TestRequest::new("GET", "/").send(&app);
+    assert_eq!(res.status_code(), 200);
+    assert!(res.body().contains("Hello"));
+}
+```
+
+No external test harness required — just write Rust tests and run `cargo test`.
+
+---
+
 ## 🧰 Project Structure
 
 Velto is organized into modular components for clarity and maintainability:
@@ -99,18 +120,19 @@ Velto is organized into modular components for clarity and maintainability:
 ```
 velto/
 ├── src/
-│   ├── app.rs          # Core application logic
-│   ├── router.rs       # Routing and handler dispatch
-│   ├── response.rs     # HTTP response utilities including redirect helpers
-│   ├── http_method.rs  # HTTP method utilities
-│   ├── form.rs         # Form data parsing
-│   ├── util.rs         # Utility functions (e.g., MIME types)
-│   ├── reload.rs       # LiveReload WebSocket + file watcher
-│   ├── dev.rs          # Dev mode toggles and helpers
-│   ├── template.rs     # Templating engine
-│   ├── macros.rs       # Macros for render! and route!
-│   ├── prelude.rs      # Public API surface
-│   └── lib.rs          # Entry point
+│   ├── app.rs           # Core application logic
+│   ├── dev.rs           # Dev mode toggles and helpers
+│   ├── form.rs          # Form data parsing
+│   ├── http_method.rs   # HTTP method utilities
+│   ├── macros.rs        # Macros for render! and route!
+│   ├── prelude.rs       # Public API surface
+│   ├── reload.rs        # LiveReload WebSocket + file watcher
+│   ├── response.rs      # HTTP response utilities including redirect helpers
+│   ├── router.rs        # Routing and handler dispatch
+│   ├── template.rs      # Templating engine with include/inheritance
+│   ├── test.rs          # TestRequest and internal test harness
+│   ├── util.rs          # Utility functions (e.g., MIME types)
+│   └── lib.rs           # Entry point
 ```
 
 ---
@@ -131,7 +153,7 @@ Whether you're building a personal site, a microservice, or a dev tool, Velto gi
 
 ## 🔁 Migration from 0.x
 
-Velto 1.0.0 introduces async support and LiveReload, but keeps the public API familiar. Here's what changed:
+Velto 1.0.0 introduced async support and LiveReload, but kept the public API familiar. Here's what changed:
 
 | Old (0.x)                          | New (1.0.0)                          |
 |-----------------------------------|--------------------------------------|
