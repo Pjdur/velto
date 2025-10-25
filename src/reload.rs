@@ -19,7 +19,10 @@ use tokio_tungstenite::accept_async;
 /// An available port number, or `None` if none found within range.
 async fn find_free_port(start: u16) -> Option<u16> {
     for port in start..start + 100 {
-        if tokio::net::TcpListener::bind(("127.0.0.1", port)).await.is_ok() {
+        if tokio::net::TcpListener::bind(("127.0.0.1", port))
+            .await
+            .is_ok() 
+        {
             return Some(port);
         }
     }
