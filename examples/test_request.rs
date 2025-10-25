@@ -1,5 +1,5 @@
 use velto::test::TestRequest;
-use velto::{route, App, Response}
+use velto::{route, App, Response};
 
 #[test]
 fn test_homepage() {
