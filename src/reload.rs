@@ -18,12 +18,8 @@ use tokio_tungstenite::accept_async;
 ///
 /// An available port number, or `None` if none found within range.
 fn find_free_port(start: u16) -> Option<u16> {
-    for port in start..start + 100 {
-        if std::net::TcpListener::bind(("127.0.0.1", port)).is_ok() {
-            return Some(port);
-        }
-    }
-    None
+    (start..start + 100)
+        .find(|&port| std::net::TcpListener::bind(("127.0.0.1", port)).is_ok())
 }
 
 /// Starts the LiveReload system, including:

@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 /// Returns the MIME type for a given file path based on its extension.
-pub(crate) fn mime_type_for(path: &PathBuf) -> &'static str {
+pub(crate) fn mime_type_for(path: &Path) -> &'static str {
     match path.extension().and_then(|ext| ext.to_str()) {
         Some("css") => "text/css",
         Some("js") => "application/javascript",

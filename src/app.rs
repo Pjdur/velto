@@ -42,7 +42,7 @@ impl App {
         let mut routes = self.routes.lock().unwrap();
         routes
             .entry(path.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .insert(method, handler);
     }
 
@@ -56,9 +56,9 @@ impl App {
     /// Registers the same handler for multiple methods at a single path.
     pub fn route_all(&mut self, methods: &[Method], path: &str, handler: Handler) {
         let mut routes = self.routes.lock().unwrap();
-        let method_map = routes.entry(path.to_string()).or_insert_with(HashMap::new);
+        let method_map = routes.entry(path.to_string()).or_default();
         for method in methods {
-            method_map.insert(method.clone(), handler.clone());
+            method_map.insert(method, handler);
         }
     }
 
@@ -93,7 +93,7 @@ impl App {
         println!("🔗 Registered routes:");
         for (path, method_map) in self.routes.lock().unwrap().iter() {
             for method in method_map.keys() {
-                println!("   • [{}] {}", format!("{:?}", method), path);
+                println!("   • [{:?}] {}", method, path);
             }
         }
 
