@@ -10,7 +10,7 @@ use tokio_tungstenite::accept_async;
 ///
 /// Used to avoid port conflicts when launching the LiveReload WebSocket server.
 ///
-/// # Arguments9
+/// # Arguments
 ///
 /// * `start` - The starting port to search from.
 ///
@@ -18,8 +18,7 @@ use tokio_tungstenite::accept_async;
 ///
 /// An available port number, or `None` if none found within range.
 fn find_free_port(start: u16) -> Option<u16> {
-    (start..start + 100)
-        .find(|&port| std::net::TcpListener::bind(("127.0.0.1", port)).is_ok())
+    (start..start + 100).find(|&port| TcpListener::bind(("127.0.0.1", port)).is_ok())
 }
 
 /// Starts the LiveReload system, including:
