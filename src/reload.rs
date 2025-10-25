@@ -40,7 +40,7 @@ async fn find_free_port(start: u16) -> Option<u16> {
 /// * `tx` - A broadcast channel used to notify reload events.
 /// * `watch_paths` - A list of directories to watch for changes.
 pub(crate) async fn start(tx: broadcast::Sender<()>, watch_paths: Vec<String>) {
-    let port = find_free_port(35729).unwrap_or(35729);
+    let port = find_free_port(35729).await.unwrap_or(35729);
     crate::dev::set_reload_port(port);
 
     tokio::spawn(start_ws_server(tx.clone(), port));
