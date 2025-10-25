@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 /// Returns the MIME type for a given file path based on its extension.
 pub(crate) fn mime_type_for(path: &Path) -> &'static str {

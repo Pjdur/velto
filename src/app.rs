@@ -58,7 +58,7 @@ impl App {
         let mut routes = self.routes.lock().unwrap();
         let method_map = routes.entry(path.to_string()).or_default();
         for method in methods {
-            method_map.insert(method, handler);
+            method_map.insert(method.clone(), handler);
         }
     }
 
