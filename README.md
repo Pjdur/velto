@@ -23,14 +23,15 @@
 
 ## ✨ Features
 
-- 🧭 Intuitive routing with `route!(...)` and `route_any!(...)` macros
-- 🧵 Templating with `render!`, `{% include %}`, and `{% extends %}` support
-- ⚡ Fully async, powered by [`async_tiny`](https://crates.io/crates/async_tiny)
-- 🔄 LiveReload support in development mode
-- 📁 Static file serving with zero config
-- 🧠 Minimal boilerplate via `velto::prelude`
-- 🧪 Built-in testing with `TestRequest`
-- 🛠 First-class CLI support via [`velto-cli`](https://crates.io/crates/velto-cli)
+- 🧭 Intuitive routing with `route!(...)` and `route_any!(...)` macros  
+- 🧵 Templating with `render!`, `{% include %}`, and `{% extends %}` support  
+- ⚡ Fully async, powered by [`async_tiny`](https://crates.io/crates/async_tiny)  
+- 🔄 LiveReload support in development mode  
+- 📁 Static file serving with zero config  
+- 🔌 Global middleware support via `App::use_middleware()`  
+- 🧠 Minimal boilerplate via `velto::prelude`  
+- 🧪 Built-in testing with `TestRequest`  
+- 🛠 First-class CLI support via [`velto-cli`](https://crates.io/crates/velto-cli)  
 
 ---
 
@@ -40,7 +41,7 @@ Add Velto to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-velto = "1.8.0"
+velto = "1.9.0"
 ```
 
 Or use [`velto-cli`](https://crates.io/crates/velto-cli) to scaffold a new project instantly:
@@ -58,6 +59,7 @@ velto run
 
 ```rust
 use velto::prelude::*;
+use velto::middleware::logger; // Built-in middleware
 
 fn homepage(_req: &Request) -> Response {
     render!("index.html", {
@@ -69,12 +71,35 @@ fn homepage(_req: &Request) -> Response {
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let mut app = App::new();
-    app.enable_dev_mode(); // Enables LiveReload
+    app.use_middleware(logger); // Add middleware
+    app.enable_dev_mode();      // Enables LiveReload
     route!(app, "/" => homepage);
     app.serve_static("static");
     app.run("127.0.0.1:8080").await
 }
 ```
+
+---
+
+## 🔌 Middleware
+
+Velto supports global middleware functions that run before and/or after route handlers.  
+Use `App::use_middleware()` to register middleware like logging, authentication, or header injection.
+
+### Example: Logger Middleware
+
+```rust
+pub fn logger(req: &Request, next: &dyn Fn(&Request) -> Response) -> Response {
+    println!("📥 {} {}", req.method(), req.url());
+    let res = next(req);
+    println!("📤 Responded with {}", res.status_code());
+    res
+}
+```
+
+- Middleware is synchronous and composable  
+- Multiple middleware are executed in registration order  
+- Built-in `logger` middleware is available in `velto::middleware`  
 
 ---
 
@@ -125,6 +150,7 @@ velto/
 │   ├── form.rs          # Form data parsing
 │   ├── http_method.rs   # HTTP method utilities
 │   ├── macros.rs        # Macros for render! and route!
+│   ├── middleware.rs    # Middleware system and built-in examples
 │   ├── prelude.rs       # Public API surface
 │   ├── reload.rs        # LiveReload WebSocket + file watcher
 │   ├── response.rs      # HTTP response utilities including redirect helpers
@@ -141,11 +167,11 @@ velto/
 
 Velto is for developers who want:
 
-- A fast, async-native web framework without the complexity of full-stack giants
-- Clean routing and templating without ceremony
-- Instant LiveReload for a smooth development loop
-- A modular codebase that grows with your project
-- A framework that feels like Rust — not like a port of something else
+- A fast, async-native web framework without the complexity of full-stack giants  
+- Clean routing and templating without ceremony  
+- Instant LiveReload for a smooth development loop  
+- A modular codebase that grows with your project  
+- A framework that feels like Rust — not like a port of something else  
 
 Whether you're building a personal site, a microservice, or a dev tool, Velto gives you just enough structure to stay productive — and just enough freedom to stay creative.
 

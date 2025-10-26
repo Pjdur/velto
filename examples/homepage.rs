@@ -1,3 +1,4 @@
+use velto::middleware::logger;
 use velto::prelude::*;
 
 fn homepage(_req: &Request) -> Response {
@@ -10,8 +11,7 @@ fn homepage(_req: &Request) -> Response {
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let mut app = App::new();
+    app.use_middleware(logger);
     route!(app, "/" => homepage);
-    app.enable_dev_mode();
-    app.serve_static("static");
     app.run("127.0.0.1:8080").await
 }

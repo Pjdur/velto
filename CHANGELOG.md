@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 
 ---
 
+## [1.9.0] - 2025-10-26
+
+### Added
+- 🔌 **Middleware system**: Velto now supports global middleware via `App::use_middleware()`
+- `velto::middleware` module with a built-in `logger` middleware for request/response logging
+- Middleware functions can inspect or modify requests and responses before/after route handlers
+- Middleware chaining is supported; multiple middleware are executed in registration order
+- Middleware signature: `fn(&Request, &dyn Fn(&Request) -> Response) -> Response`
+
+### Notes
+- Middleware is synchronous and compatible with existing sync route handlers
+- The `logger` middleware is used in `examples/homepage.rs` and serves as a reference for custom middleware
+- No breaking changes — existing apps continue to work without modification
+
 ## [1.8.0] - 2025-10-20
 
 ### Added

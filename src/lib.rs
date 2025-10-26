@@ -2,6 +2,7 @@ pub mod app;
 pub mod form;
 pub mod http_method;
 pub mod macros;
+pub mod middleware;
 pub mod prelude;
 mod reload;
 pub mod response;

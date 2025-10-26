@@ -1,6 +1,8 @@
 use crate::http_method::Method;
+use crate::middleware::Middleware;
 use crate::router::{Handler, Response};
 use crate::util::mime_type_for;
+use crate::Request;
 use async_tiny::{Header, Server};
 use pathx::Normalize;
 use std::collections::HashMap;
@@ -9,11 +11,12 @@ use std::path::PathBuf;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 
-/// Velto application instance. Manages routes, static directories, and dev mode.
+/// Velto application instance. Manages routes, static directories, dev mode and middleware.
 pub struct App {
     routes: Arc<Mutex<HashMap<String, HashMap<Method, Handler>>>>,
     watch_dirs: Vec<String>,
     dev_mode: bool,
+    middlewares: Vec<Middleware>,
 }
 
 impl App {
@@ -23,7 +26,13 @@ impl App {
             routes: Arc::new(Mutex::new(HashMap::new())),
             watch_dirs: Vec::new(),
             dev_mode: false,
+            middlewares: Vec::new(),
         }
+    }
+
+    /// Registers a middleware function to be applied to all routes.
+    pub fn use_middleware(&mut self, mw: Middleware) {
+        self.middlewares.push(mw);
     }
 
     /// Enables development mode and triggers hot-reload behavior.
@@ -38,12 +47,17 @@ impl App {
     }
 
     /// Registers a route handler for a given method and path.
-    pub fn route(&mut self, method: Method, path: &str, handler: Handler) {
+    pub fn route(
+        &mut self,
+        method: Method,
+        path: &str,
+        handler: impl Fn(&Request) -> Response + Send + Sync + 'static,
+    ) {
         let mut routes = self.routes.lock().unwrap();
         routes
             .entry(path.to_string())
             .or_default()
-            .insert(method, handler);
+            .insert(method, Box::new(handler));
     }
 
     /// Returns all registered routes
@@ -54,11 +68,16 @@ impl App {
     }
 
     /// Registers the same handler for multiple methods at a single path.
-    pub fn route_all(&mut self, methods: &[Method], path: &str, handler: Handler) {
+    pub fn route_all(
+        &mut self,
+        methods: &[Method],
+        path: &str,
+        handler: impl Fn(&Request) -> Response + Send + Sync + 'static + Clone,
+    ) {
         let mut routes = self.routes.lock().unwrap();
         let method_map = routes.entry(path.to_string()).or_default();
         for method in methods {
-            method_map.insert(method.clone(), handler);
+            method_map.insert(method.clone(), Box::new(handler.clone()));
         }
     }
 
@@ -119,7 +138,15 @@ impl App {
 
             if let Some(method_map) = routes.get(&url) {
                 if let Some(handler) = method_map.get(&method) {
-                    response = Some(handler(&request));
+                    let mut wrapped: Box<dyn Fn(&Request) -> Response + Send + Sync> =
+                        Box::new(|req| handler(req));
+
+                    for mw in self.middlewares.iter().rev() {
+                        let next = wrapped;
+                        wrapped = Box::new(move |req| mw(req, &next));
+                    }
+
+                    response = Some(wrapped(&request));
                 }
             }
 
